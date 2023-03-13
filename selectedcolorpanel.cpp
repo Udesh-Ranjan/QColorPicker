@@ -26,3 +26,11 @@ void SelectedColorPanel::paintEvent(QPaintEvent * event){
     QRect rect(0, 0, width(), height());
     painter.fillRect(rect, brush);
 }
+
+int SelectedColorPanel::getScreenWidth(){
+    return screenWidth;
+}
+
+int SelectedColorPanel::getScreenHeight(){
+    return screenHeight;
+}

@@ -172,3 +172,6 @@ void Slider::mouseReleaseEvent(QMouseEvent * event){
     std::cout<<"Mouse Release Event"<<std::endl;
 }
 
+QColor Slider::getCircularButtonColor(){
+    return circularButton.getColor();
+}

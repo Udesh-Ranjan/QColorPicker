@@ -7,6 +7,7 @@ SOURCES += \
     circularbutton.cpp \
     main.cpp \
     mainwindow.cpp \
+    rightpanelcircularbutton.cpp \
     selectedcolorpanel.cpp \
     slider.cpp
 
@@ -16,5 +17,6 @@ HEADERS += \
     centralwidget.h \
     circularbutton.h \
     mainwindow.h \
+    rightpanelcircularbutton.h \
     selectedcolorpanel.h \
     slider.h

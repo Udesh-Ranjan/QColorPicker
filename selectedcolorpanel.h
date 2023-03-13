@@ -18,12 +18,16 @@ class SelectedColorPanel : public QWidget, public ColorChangeListener{
 public:
     explicit SelectedColorPanel(QWidget *parent = nullptr);
     void colorChanged(QColor &);
+    int getScreenWidth();
+    int getScreenHeight();
 
 protected:
     virtual void paintEvent(QPaintEvent * event);
 
 private:
     QColor panelColor = Qt::red;
+    int screenWidth = 300;
+    int screenHeight = 300;
 
 signals:
 

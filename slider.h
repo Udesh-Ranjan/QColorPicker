@@ -15,6 +15,7 @@
 
 class Slider : public QWidget, public ColorChangeManager{
     Q_OBJECT
+
 public:
     explicit Slider(QWidget *parent = nullptr);
     void initializeSlider();
@@ -23,9 +24,9 @@ public:
     virtual bool attachColorChangeListener(ColorChangeListener &);
     virtual bool detachColorChangeListener(ColorChangeListener &);
     virtual void notifyColorChangeListener(QColor &);
+    QColor getCircularButtonColor();
 
 protected:
-
     virtual void paintEvent(QPaintEvent * event);
     void mouseMoveEvent(QMouseEvent * event);
     void mousePressEvent(QMouseEvent * event);
@@ -40,6 +41,5 @@ private:
     CircularButton circularButton;
     bool mouseClick;
     std::vector<ColorChangeListener *>colorChangeListeners;
-
 };
 #endif // SLIDER_H

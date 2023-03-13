@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent)
 }
 void MainWindow::initializeWindow(){
     std::cout<<"Initializing"<<std::endl;
-    setFixedSize(700, 550);
+    setFixedSize(700, 500);
     CentralWidget * centralWidget = new CentralWidget();
     setCentralWidget(centralWidget);
     centralWidget->show();
