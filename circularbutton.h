@@ -20,7 +20,7 @@ public:
     void drawCircle(QPainter *);
 
 private:
-    float radius=15;
+    float radius=12;
     QPointF center;
 
     QColor color;

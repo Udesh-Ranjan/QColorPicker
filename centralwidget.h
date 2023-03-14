@@ -10,6 +10,11 @@
 #include "selectedcolorpanel.h"
 #include "rightpanelcircularbutton.h"
 #include "ColorChangeManager.h"
+#include "hexcolorgroupbox.h"
+#include "rgbcolorgroupbox.h"
+#include "cmykcolorgroupbox.h"
+#include "hsvcolorgroupbox.h"
+#include "hslcolorgroupbox.h"
 
 class CentralWidget : public QWidget, public ColorChangeListener, ColorChangeManager{
     Q_OBJECT
@@ -23,6 +28,8 @@ public:
     bool detachColorChangeListener(ColorChangeListener &);
     void notifyColorChangeListener(QColor &);
 
+    void updateLeftPanel(QPainter *);
+
 protected:
     virtual void paintEvent(QPaintEvent *);
     void mouseMoveEvent(QMouseEvent *);
@@ -31,7 +38,7 @@ protected:
 
 private:
     bool mouseClick = false;
-    int rightPanelWidth = 385;
+    int rightPanelWidth = 485;
     int rightPanelHeight = 300;
     QRect rightSelectedArea;
     std::vector<std::vector<int> *>saturationValueVector;
@@ -40,7 +47,12 @@ private:
     SelectedColorPanel * selectedColorPanel = new SelectedColorPanel();
     Slider * slider = new Slider();
     std::vector<ColorChangeListener *>colorChangeListeners;
-signals:
+
+    HexColorGroupBox * hexColorGroupBox = new HexColorGroupBox();
+    RgbColorGroupBox * rgbColorGroupBox = new RgbColorGroupBox();
+    CmykColorGroupBox * cmykColorGroupBox = new CmykColorGroupBox();
+    HsvColorGroupBox * hsvColorGroupBox = new HsvColorGroupBox();
+    HslColorGroupBox * hslColorGroupBox = new HslColorGroupBox();
 
 };
 

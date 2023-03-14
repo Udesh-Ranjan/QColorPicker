@@ -33,10 +33,10 @@ protected:
     void mouseReleaseEvent(QMouseEvent * event);
 
 private:
-    int sliderWidth = 600;
-    int sliderHeight = 20;
-    int windowWidth = 700;
-    int windowHeight = 300;
+    int sliderWidth = 700;
+    int sliderHeight = 8;
+    int windowWidth = 740;
+    int windowHeight = 40;
     std::vector<std::vector<int>>colors;
     CircularButton circularButton;
     bool mouseClick;

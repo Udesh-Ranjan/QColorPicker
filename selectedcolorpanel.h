@@ -11,26 +11,24 @@
 #include <QRect>
 #include <iostream>
 
-#include "ColorChangeListener.h"
-
-class SelectedColorPanel : public QWidget, public ColorChangeListener{
-    Q_OBJECT
+class SelectedColorPanel {
 public:
-    explicit SelectedColorPanel(QWidget *parent = nullptr);
-    void colorChanged(QColor &);
+    SelectedColorPanel();
     int getScreenWidth();
     int getScreenHeight();
-
-protected:
-    virtual void paintEvent(QPaintEvent * event);
+    int getStartX();
+    int getStartY();
+    void setStartX(int);
+    void setStartY(int);
+    void paintPanel(QPainter * painter);
+    QColor getPanelColor();
+    void setPanelColor(QColor color);
 
 private:
     QColor panelColor = Qt::red;
     int screenWidth = 300;
-    int screenHeight = 300;
-
-signals:
-
+    int screenHeight = 289;
+    int startX=10, startY=10;
 };
 
 #endif // SELECTEDCOLORPANEL_H

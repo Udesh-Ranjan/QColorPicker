@@ -1,33 +1,54 @@
 #include "centralwidget.h"
-
+#include "hexcolorgroupbox.h"
 
 #include <QVBoxLayout>
 #include <Qt>
+#include <QLabel>
 
 CentralWidget::CentralWidget(QWidget *parent)
     : QWidget{parent}{
-    setFixedSize(700, 500);
+    setFixedSize(800, 600);
     QVBoxLayout * vLayout = new QVBoxLayout();
+    vLayout->setContentsMargins(5, 300, 5, 0);
 
-    vLayout->addWidget(selectedColorPanel);
-    vLayout->addWidget(slider);
+    vLayout->setAlignment(Qt::AlignHCenter);
+    QWidget * widget = new QWidget();
+    widget->setFixedHeight(80);
+    QHBoxLayout * layout = new QHBoxLayout();
+    layout->addWidget(slider);
+    widget->setLayout(layout);
+    vLayout->addWidget(widget);
+    vLayout->addWidget(hexColorGroupBox);
+    QWidget * colorWidgets = new QWidget();
+    colorWidgets->setFixedHeight(60);
+    QHBoxLayout * colorWidgetLayout = new QHBoxLayout();
+    colorWidgetLayout->setSpacing(10);
+    colorWidgetLayout->addWidget(rgbColorGroupBox);
+    colorWidgetLayout->addWidget(cmykColorGroupBox);
+    colorWidgetLayout->addWidget(hsvColorGroupBox);
+    colorWidgetLayout->addWidget(hslColorGroupBox);
+
+    QColor col(255, 0 ,0);
+    rgbColorGroupBox->colorChanged(col);
+    cmykColorGroupBox->colorChanged(col);
+    hsvColorGroupBox->colorChanged(col);
+    hslColorGroupBox->colorChanged(col);
+    hexColorGroupBox->colorChanged(col);
+
+    colorWidgets->setLayout(colorWidgetLayout);
+    vLayout->addWidget(colorWidgets);
     setLayout(vLayout);
 
-    slider->attachColorChangeListener(*selectedColorPanel);
     slider->attachColorChangeListener(*this);
+//    slider->attachColorChangeListener(*hexColorGroupBox);
     rightSelectedArea.setRect(selectedColorPanel->getScreenWidth() + 8, 9, rightPanelWidth, rightPanelHeight);
     rightPanelCircularButton.setCenter(rightSelectedArea.topRight());
     rightPanelCircularButton.setColor(QColor(255, 0, 0));
-    attachColorChangeListener(*selectedColorPanel);
-//    for(int x=rightSelectedArea.x(); x < rightSelectedArea.width() + rightSelectedArea.x(); x++){
-//        for(int y = rightSelectedArea.y(); y < rightSelectedArea.height() + rightSelectedArea.y(); y++){
-//            float value = ((rightSelectedArea.height() + rightSelectedArea.y() - y * 1.0) / rightSelectedArea.height()) * 255;
-//            float saturation = ((x - rightSelectedArea.x() * 1.0) / rightSelectedArea.width()) * 255;
-//            saturationValueVector.push_back(new std::vector<int>{(int)saturation, (int)value});
-//        }
-//    }
     slider->show();
     repaint();
+}
+void CentralWidget::updateLeftPanel(QPainter * painter){
+    selectedColorPanel->paintPanel(painter);
 }
 void CentralWidget::updateRightPanel(QPainter * painter){
     QPen pen;
@@ -38,7 +59,7 @@ void CentralWidget::updateRightPanel(QPainter * painter){
     painter->setPen(pen);
     painter->setBrush(brush);
 
-    QRect rect(selectedColorPanel->getScreenWidth() + 8, 9, rightPanelWidth, rightPanelHeight);
+    QRect rect(rightSelectedArea);
     painter->fillRect(rect, brush);
     for(int x=rect.x(); x < rect.width() + rect.x(); x++){
         for(int y = rect.y(); y < rect.height() + rect.y(); y++){
@@ -59,13 +80,27 @@ void CentralWidget::updateRightPanel(QPainter * painter){
 }
 void CentralWidget::paintEvent(QPaintEvent * paintEvent){
     QPainter painter(this);
+    updateLeftPanel(&painter);
     updateRightPanel(&painter);
     rightPanelCircularButton.drawCircle(&painter);
     std::cout<<"paintEvent CentralWidget"<<std::endl;
 }
 
 void CentralWidget::colorChanged(QColor & color){
-    rightSelectedColor->setRgb(color.rgb());
+    const QPointF center = rightPanelCircularButton.getCenter();
+    const float value = ((rightSelectedArea.height() + rightSelectedArea.y() - center.y() * 1.0) / rightSelectedArea.height()) * 255;
+    const float saturation = ((center.x() - rightSelectedArea.x() * 1.0) / rightSelectedArea.width()) * 255;
+    QColor _color;
+    _color.setHsv(color.hue(), saturation, value);
+    selectedColorPanel->setPanelColor(_color);
+    rightSelectedColor->setHsv(_color.hue(), _color.saturation(), _color.value());
+    hexColorGroupBox->colorChanged(_color);
+    rgbColorGroupBox->colorChanged(color);
+    cmykColorGroupBox->colorChanged(color);
+    hslColorGroupBox->colorChanged(color);
+    hsvColorGroupBox->colorChanged(color);
+//    selectedColorPanel->colorChanged(_color);
+    rightPanelCircularButton.setColor(_color);
     repaint();
 }
 
@@ -76,14 +111,6 @@ void CentralWidget::mousePressEvent(QMouseEvent * event){
 
     if(rightSelectedArea.contains(event->pos())){
         mouseClick = true;
-        std::cout<<"Gotcha **********"<<std::endl;
-        //        float _x = event->x();
-        //        float _y = (windowHeight - sliderHeight) / 2 + sliderHeight / 2;
-        //        float per = (_x - (windowWidth - sliderWidth) / 2) / sliderWidth;
-        //        int index = std::min(std::max(int(colors.size() * per), 0) , (int)(colors.size() - 1));
-        //        std::vector<int>col = colors[index];
-        //        QColor _color;
-        //        _color.setRgb(col[0], col[1], col[2]);
         moveCircularButton(QPointF(x, y));
         repaint();
     }
@@ -96,14 +123,6 @@ void CentralWidget::mouseMoveEvent(QMouseEvent * event){
     const int y = event->y();
 
     if(mouseClick){
-        std::cout<<"Gotcha **********"<<std::endl;
-        //        float _x = event->x();
-        //        float _y = (windowHeight - sliderHeight) / 2 + sliderHeight / 2;
-        //        float per = (_x - (windowWidth - sliderWidth) / 2) / sliderWidth;
-        //        int index = std::min(std::max(int(colors.size() * per), 0) , (int)(colors.size() - 1));
-        //        std::vector<int>col = colors[index];
-        //        QColor _color;
-        //        _color.setRgb(col[0], col[1], col[2]);
         int _x = std::min(std::max(rightSelectedArea.x(), x), rightSelectedArea.x() + rightSelectedArea.width());
         int _y = std::min(std::max(rightSelectedArea.y(), y), rightSelectedArea.y() + rightSelectedArea.height());
 
@@ -118,13 +137,6 @@ void CentralWidget::mouseReleaseEvent(QMouseEvent * event){
 }
 
 void CentralWidget::moveCircularButton(QPointF point){
-//    double _x = point.x();
-//    double _y = (windowHeight - sliderHeight) / 2 + sliderHeight / 2;
-//    double per = (_x - (windowWidth - sliderWidth) / 2) / sliderWidth;
-//    int index = std::min(std::max(int(colors.size() * per), 0) , (int)(colors.size() - 1));
-//    std::vector<int>col = colors[index];
-//    QColor _color;
-//    _color.setRgb(col[0], col[1], col[2]);
     double x = point.x();
     double y = point.y();
     const float value = ((rightSelectedArea.height() + rightSelectedArea.y() - y * 1.0) / rightSelectedArea.height()) * 255;
@@ -133,9 +145,14 @@ void CentralWidget::moveCircularButton(QPointF point){
     QColor color;
     color.setHsv(col.hue(), saturation, value);
     notifyColorChangeListener(color);
+    rightPanelCircularButton.setColor(color);
     rightPanelCircularButton.setCenter(point);
-//    circularButton.setColor(_color);
-
+    hexColorGroupBox->colorChanged(color);
+    rgbColorGroupBox->colorChanged(color);
+    cmykColorGroupBox->colorChanged(color);
+    hslColorGroupBox->colorChanged(color);
+    hsvColorGroupBox->colorChanged(color);
+    selectedColorPanel->setPanelColor(color);
     //    repaint();
 }
 

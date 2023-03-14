@@ -77,8 +77,10 @@ void Slider::paintEvent(QPaintEvent * event){
     std::cout<<"PaintEvent"<<std::endl;
 
     QPainter painter(this);
+    painter.setPen(Qt::green);
 
-    painter.drawRect(0, 0, windowWidth, windowHeight);
+//    painter.drawRect(0, 0, windowWidth, windowHeight);
+//    painter.fillRect(0, 0, width(), height(), Qt::green);
     //    painter.setRenderHint(QPainter::Antialiasing);
 
     drawSlider(event, &painter);
