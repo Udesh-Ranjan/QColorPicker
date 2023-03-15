@@ -12,7 +12,7 @@ SelectedColorPanel::SelectedColorPanel(){
 //}
 
 void SelectedColorPanel::paintPanel(QPainter * painter){
-//    QPainter painter(this);
+    //    QPainter painter(this);
     QPen pen;
     pen.setColor(panelColor);
     QBrush brush;

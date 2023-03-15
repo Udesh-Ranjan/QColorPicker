@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QPainter>
 #include <QPaintEvent>
+#include <typeinfo>
 
 #include "slider.h"
 #include "ColorChangeListener.h"
@@ -15,8 +16,10 @@
 #include "cmykcolorgroupbox.h"
 #include "hsvcolorgroupbox.h"
 #include "hslcolorgroupbox.h"
+#include "TextColorValueListener.h"
 
-class CentralWidget : public QWidget, public ColorChangeListener, ColorChangeManager{
+class CentralWidget : public QWidget, public ColorChangeListener,
+        public ColorChangeManager, public TextColorValueListener{
     Q_OBJECT
 public:
     explicit CentralWidget(QWidget *parent = nullptr);
@@ -29,6 +32,8 @@ public:
     void notifyColorChangeListener(QColor &);
 
     void updateLeftPanel(QPainter *);
+
+    void textColorValueChanged(QColor &);
 
 protected:
     virtual void paintEvent(QPaintEvent *);

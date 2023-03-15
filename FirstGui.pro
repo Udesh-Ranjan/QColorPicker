@@ -20,6 +20,8 @@ SOURCES += \
 HEADERS += \
     ColorChangeListener.h \
     ColorChangeManager.h \
+    TextColorValueChangeManager.h \
+    TextColorValueListener.h \
     centralwidget.h \
     circularbutton.h \
     cmykcolorgroupbox.h \

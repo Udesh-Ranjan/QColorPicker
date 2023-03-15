@@ -10,5 +10,7 @@ public:
 
     virtual void colorChanged(QColor &) = 0;
 
+private:
+
 };
 #endif // COLORCHANGELISTENER_H

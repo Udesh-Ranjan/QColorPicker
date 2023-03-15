@@ -5,6 +5,10 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLineEdit>
+#include <QPushButton>
+#include <QIcon>
+#include <iostream>
+
 #include "ColorChangeListener.h"
 
 class ColorGroupBox : public QGroupBox, public ColorChangeListener{
@@ -12,10 +16,11 @@ class ColorGroupBox : public QGroupBox, public ColorChangeListener{
 public:
     explicit ColorGroupBox(QWidget *parent = nullptr);
     QLineEdit * getLineEdit();
-    QVBoxLayout * getLayout();
+    QHBoxLayout * getLayout();
     virtual void colorChanged(QColor &) = 0;
+
 private:
-    QVBoxLayout * layout = new QVBoxLayout();
+    QHBoxLayout * layout = new QHBoxLayout();
     QLineEdit * lineEdit = new QLineEdit();
 
 };

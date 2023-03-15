@@ -1,7 +1,6 @@
 #include "slider.h"
 
 #include<QColor>
-#include "ColorChangeManager.h"
 
 bool Slider::attachColorChangeListener(ColorChangeListener & listener){
     if(std::find(colorChangeListeners.begin(),
@@ -79,8 +78,8 @@ void Slider::paintEvent(QPaintEvent * event){
     QPainter painter(this);
     painter.setPen(Qt::green);
 
-//    painter.drawRect(0, 0, windowWidth, windowHeight);
-//    painter.fillRect(0, 0, width(), height(), Qt::green);
+    //    painter.drawRect(0, 0, windowWidth, windowHeight);
+    //    painter.fillRect(0, 0, width(), height(), Qt::green);
     //    painter.setRenderHint(QPainter::Antialiasing);
 
     drawSlider(event, &painter);
@@ -114,11 +113,11 @@ void Slider::drawSlider(QPaintEvent *event, QPainter * painter){
 
 void Slider::mouseMoveEvent(QMouseEvent * event){
     std::cout<<"Mouse Move Event"<<std::endl;
-    std::cout<<event->x()<<std::endl;
-    std::cout<<event->y()<<std::endl;
-    std::cout<<std::endl;
-    const int x = event->x();
-    const int y = event->y();
+    //    std::cout<<event->x()<<std::endl;
+    //    std::cout<<event->y()<<std::endl;
+    //    std::cout<<std::endl;
+    const int x = event->pos().x();
+    const int y = event->pos().y();
     if(mouseClick && x >= (windowWidth - sliderWidth) / 2 && x <= (windowWidth - sliderWidth) / 2 + sliderWidth){
 
         moveCircularButton(QPointF(x, y));
@@ -130,12 +129,12 @@ void Slider::mouseMoveEvent(QMouseEvent * event){
 
 void Slider::mousePressEvent(QMouseEvent * event){
     std::cout<<"Mouse Press Event"<<std::endl;
-    std::cout<<event->x()<<std::endl;
-    std::cout<<event->y()<<std::endl;
-    std::cout<<std::endl;
+    //    std::cout<<event->x()<<std::endl;
+    //    std::cout<<event->y()<<std::endl;
+    //    std::cout<<std::endl;
 
-    const int x = event->x();
-    const int y = event->y();
+    const int x = event->pos().x();
+    const int y = event->pos().y();
 
     if(x >= (windowWidth - sliderWidth) / 2 && x <= (windowWidth - sliderWidth) / 2 + sliderWidth &&
             y >= (windowHeight - sliderHeight) / 2 && y <= (windowHeight - sliderHeight) / 2 + sliderHeight){
@@ -176,4 +175,46 @@ void Slider::mouseReleaseEvent(QMouseEvent * event){
 
 QColor Slider::getCircularButtonColor(){
     return circularButton.getColor();
+}
+
+void Slider::moveSliderTowardsColor(QColor & color){
+
+    auto findCloseness = [](long r1, long g1, long b1, long r2, long g2, long b2){
+        return sqrt(pow(r1 - r2, 2) + pow(g1 - g2, 2) + pow(b1 - b2, 2));
+    };
+    const long red = color.red();
+    const long green = color.green();
+    const long blue = color.blue();
+    int index = -1;
+    long long closeness = LLONG_MAX;
+    for(unsigned long long i = 0; i < colors.size(); i++){
+        std::vector<int> & col = colors[i];
+        const long r = col[0];
+        const long g = col[1];
+        const long b = col[2];
+        if (index == -1){
+            double close = findCloseness(r, g, b, red, green, blue);
+            closeness = close;
+            index = i;
+        }else{
+            double tempClose = findCloseness(r, g, b, red, green, blue);
+            if(tempClose < closeness){
+                closeness = tempClose;
+                index = i;
+            }
+        }
+    }
+    if(index != -1){
+        double per = (index + 1.0) / colors.size();
+        double _y = (windowHeight - sliderHeight) / 2 + sliderHeight / 2;
+        double _x = sliderWidth * per + (windowWidth - sliderWidth) / 2;
+        std::vector<int>col = colors[index];
+        QColor _color;
+        _color.setRgb(col[0], col[1], col[2]);
+        circularButton.setCenter(QPointF(_x, _y));
+        circularButton.setColor(_color);
+        repaint();
+    }else{
+        throw "Value error index is -1";
+    }
 }

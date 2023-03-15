@@ -25,6 +25,7 @@ public:
     virtual bool detachColorChangeListener(ColorChangeListener &);
     virtual void notifyColorChangeListener(QColor &);
     QColor getCircularButtonColor();
+    void moveSliderTowardsColor(QColor &);
 
 protected:
     virtual void paintEvent(QPaintEvent * event);
