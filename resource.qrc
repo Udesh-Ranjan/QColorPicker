@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file alias="copy.png">../../../../Pictures/icons/copy-outline-icon.png</file>
+        <file alias="tick.png">../../../../Pictures/icons/tick-icon.png</file>
+        <file alias="QColorChooser.png">../../../../Pictures/icons/QColorChooser.png</file>
+    </qresource>
+</RCC>

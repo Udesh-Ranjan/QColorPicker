@@ -2,7 +2,6 @@
 #include <QApplication>
 
 #include "hexcolorgroupbox.h"
-#include "qapplication.h"
 
 HexColorGroupBox::HexColorGroupBox(QWidget * parent):ColorGroupBox{parent}{
     setTitle("HEX");
@@ -15,7 +14,8 @@ HexColorGroupBox::HexColorGroupBox(QWidget * parent):ColorGroupBox{parent}{
     QWidget * widget = new QWidget();
     widget->setFixedSize(25, 20);
     getLayout()->insertWidget(0, widget);
-    QIcon * icon = new QIcon("C:/Users/devpa/Pictures/icons/copy-outline-icon.png");
+//    QIcon * icon = new QIcon("C:/Users/devpa/Pictures/icons/copy-outline-icon.png");
+    QIcon * icon = new QIcon(":/icons/copy.png");
     copyButton->setIcon(*icon);
     copyButton->setFixedSize(25, 20);
     copyButton->setStyleSheet("QPushButton { border: 0px;}");
@@ -26,19 +26,14 @@ HexColorGroupBox::HexColorGroupBox(QWidget * parent):ColorGroupBox{parent}{
 }
 
 void HexColorGroupBox::resetCopyButton(){
-    copyButton->setIcon(QIcon("C:/Users/devpa/Pictures/icons/copy-outline-icon.png"));
+    copyButton->setIcon(QIcon(":/icons/copy.png"));
     copyFlag = true;
 }
 
 void HexColorGroupBox::copyButtonClicked(){
     if(copyFlag){
-//        QClipboard * clipboard = QApplication::clipboard();
-//        QClipboard* clipboard = QApplication::clipboard();
-
-//        clipboard->setText(getLineEdit()->text(), QClipboard::Clipboard);
         clipboard->setText(getLineEdit()->text());
-//        clipboard->setText(text, QClipboard::Clipboard);
-        copyButton->setIcon(QIcon("C:/Users/devpa/Pictures/icons/tick-icon.png"));
+        copyButton->setIcon(QIcon(":/icons/tick.png"));
         std::cout<<"Copy Button clicked"<<std::endl;
         copyFlag = false;
     }

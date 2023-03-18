@@ -118,9 +118,9 @@ void Slider::mouseMoveEvent(QMouseEvent * event){
     //    std::cout<<std::endl;
     const int x = event->pos().x();
     const int y = event->pos().y();
-    if(mouseClick && x >= (windowWidth - sliderWidth) / 2 && x <= (windowWidth - sliderWidth) / 2 + sliderWidth){
-
-        moveCircularButton(QPointF(x, y));
+    if(mouseClick){
+        int _x = std::max(std::min(x, (windowWidth - sliderWidth) / 2 + sliderWidth), (windowWidth - sliderWidth) / 2);
+        moveCircularButton(QPointF(_x, y));
         repaint();
     }
     event->accept();
@@ -140,13 +140,6 @@ void Slider::mousePressEvent(QMouseEvent * event){
             y >= (windowHeight - sliderHeight) / 2 && y <= (windowHeight - sliderHeight) / 2 + sliderHeight){
         mouseClick = true;
         std::cout<<"Inside"<<std::endl;
-        //        float _x = event->x();
-        //        float _y = (windowHeight - sliderHeight) / 2 + sliderHeight / 2;
-        //        float per = (_x - (windowWidth - sliderWidth) / 2) / sliderWidth;
-        //        int index = std::min(std::max(int(colors.size() * per), 0) , (int)(colors.size() - 1));
-        //        std::vector<int>col = colors[index];
-        //        QColor _color;
-        //        _color.setRgb(col[0], col[1], col[2]);
         moveCircularButton(QPointF(x, y));
         repaint();
     }

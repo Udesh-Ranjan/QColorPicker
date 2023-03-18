@@ -34,3 +34,6 @@ HEADERS += \
     rightpanelcircularbutton.h \
     selectedcolorpanel.h \
     slider.h
+
+RESOURCES += \
+    resource.qrc
